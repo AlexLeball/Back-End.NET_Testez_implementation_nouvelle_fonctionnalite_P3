@@ -1,10 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
 {
-        public class OrderViewModel
+    public class RequiredLocalizedAttribute : RequiredAttribute
+    {
+        private readonly string _resourceKey;
+
+        public RequiredLocalizedAttribute(string resourceKey)
+        {
+            _resourceKey = resourceKey;
+        }
+    }
+
+    public class OrderViewModel
     {
         [BindNever]
         public int OrderId { get; set; }
@@ -12,19 +23,19 @@ namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
         [BindNever]
         public ICollection<CartLine> Lines { get; set; }
 
-        [RequiredLocalized("ErrorMissingName")]
+        [RequiredLocalizedAttribute("ErrorMissingName")]
         public string Name { get; set; }
 
-        [RequiredLocalized("ErrorMissingAddress")]
+        [RequiredLocalizedAttribute("ErrorMissingAddress")]
         public string Address { get; set; }
 
-        [RequiredLocalized("ErrorMissingCity")]
+        [RequiredLocalizedAttribute("ErrorMissingCity")]
         public string City { get; set; }
 
-        [RequiredLocalized("ErrorMissingZipCode")]
+        [RequiredLocalizedAttribute("ErrorMissingZipCode")]
         public string Zip { get; set; }
 
-        [RequiredLocalized("ErrorMissingCountry")]
+        [RequiredLocalizedAttribute("ErrorMissingCountry")]
         public string Country { get; set; }
 
         [BindNever]
