@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using P3AddNewFunctionalityDotNetCore.Models.Services;
 using P3AddNewFunctionalityDotNetCore.Models.ViewModels;
 using System.Collections.Generic;
@@ -11,11 +12,13 @@ namespace P3AddNewFunctionalityDotNetCore.Controllers
     {
         private readonly IProductService _productService;
         private readonly ILanguageService _languageService;
+        private readonly IStringLocalizer<ProductController> _localizer;
 
-        public ProductController(IProductService productService, ILanguageService languageService)
+        public ProductController(IProductService productService, ILanguageService languageService, IStringLocalizer<ProductController> localizer)
         {
             _productService = productService;
             _languageService = languageService;
+            _localizer = localizer;
         }
 
         public IActionResult Index()
@@ -40,23 +43,22 @@ namespace P3AddNewFunctionalityDotNetCore.Controllers
         [HttpPost]
         public IActionResult Create(ProductViewModel product)
         {
-            List<string> modelErrors = _productService.CheckProductModelErrors(product);           
+            if (!ModelState.IsValid)
+            {
+                var additionalErrors = _productService.CheckProductModelErrors(product);
 
-            foreach (string error in modelErrors)
-            {
-                ModelState.AddModelError("", error);
-            }
+                foreach (var error in additionalErrors)
+                {
+                    ModelState.AddModelError("", error);
+                }
 
-            if (ModelState.IsValid)
-            {
-                _productService.SaveProduct(product);
-                return RedirectToAction("Admin");
-            }
-            else
-            {
                 return View(product);
             }
+
+            _productService.SaveProduct(product);
+            return RedirectToAction("Admin");
         }
+
 
         [Authorize]
         [HttpPost]

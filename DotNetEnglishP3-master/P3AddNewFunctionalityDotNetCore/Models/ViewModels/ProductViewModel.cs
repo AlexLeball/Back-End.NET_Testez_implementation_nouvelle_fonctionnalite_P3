@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
 {
-
     public class ProductViewModel
     {
         [BindNever]
@@ -19,12 +18,23 @@ namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
         public string Details { get; set; }
 
         [RequiredLocalizedAttribute("ErrorStockValue")]
-        [RegularExpression(@"^\d+$", ErrorMessage = "Stock must be a number")]
-        [Range(1, int.MaxValue, ErrorMessage = "QuantityNotGreaterThanZero")]
-        public string Stock { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "Stock must be at least 1.")]
+        public int Stock { get; set; }
 
         [RequiredLocalizedAttribute("ErrorPriceValue")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "PriceNotGreaterThanZero")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0.")]
         public double Price { get; set; }
     }
+
+    public class RequiredLocalizedAttribute : RequiredAttribute
+    {
+        private readonly string _resourceKey;
+
+        public RequiredLocalizedAttribute(string resourceKey)
+        {
+            _resourceKey = resourceKey;
+        }
+   
+    }
 }
+

@@ -41,7 +41,7 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
                 products.Add(new ProductViewModel
                 {
                     Id = product.Id,
-                    Stock = product.Quantity.ToString(),
+                    Stock = product.Quantity,
                     Price = product.Price,
                     Name = product.Name,
                     Description = product.Description,
@@ -90,7 +90,6 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
                 _productRepository.UpdateProductStocks(line.Product.Id, line.Quantity);
             }
         }
-
         public List<string> CheckProductModelErrors(ProductViewModel product)
         {
             List<string> modelErrors = new List<string>();
@@ -105,13 +104,15 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
             {
                 foreach (var validationResult in validationResults)
                 {
-                    // Add the localized error message to the modelErrors list
-                    modelErrors.Add(validationResult.ErrorMessage);
+                    // Check if the error message is localized
+                    string localizedErrorMessage = _localizer[validationResult.ErrorMessage] ?? validationResult.ErrorMessage;
+                    modelErrors.Add(localizedErrorMessage);
                 }
             }
 
             return modelErrors;
         }
+
         public void SaveProduct(ProductViewModel product)
         {
             var productToAdd = MapToProductEntity(product);
@@ -130,6 +131,7 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
             };
             return productEntity;
         }
+
 
         public void DeleteProduct(int id)
         {
