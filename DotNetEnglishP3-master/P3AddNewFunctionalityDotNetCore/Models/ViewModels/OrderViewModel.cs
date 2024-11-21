@@ -1,10 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Localization;
+using System.ComponentModel.DataAnnotations;
 
 namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
 {
-    
+    public class RequiredLocalizedAttribute : RequiredAttribute
+    {
+        private readonly string _resourceKey;
+
+        public RequiredLocalizedAttribute(string resourceKey)
+        {
+            _resourceKey = resourceKey;
+        }
+
+    }
     public class OrderViewModel
     {
         [BindNever]

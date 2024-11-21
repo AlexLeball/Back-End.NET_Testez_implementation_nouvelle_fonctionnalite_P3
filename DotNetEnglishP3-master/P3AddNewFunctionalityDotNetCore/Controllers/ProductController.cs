@@ -43,21 +43,10 @@ namespace P3AddNewFunctionalityDotNetCore.Controllers
         [HttpPost]
         public IActionResult Create(ProductViewModel product)
         {
-            if (!ModelState.IsValid)
-            {
-                var additionalErrors = _productService.CheckProductModelErrors(product);
-
-                foreach (var error in additionalErrors)
-                {
-                    ModelState.AddModelError("", error);
-                }
-
-                return View(product);
-            }
-
             _productService.SaveProduct(product);
             return RedirectToAction("Admin");
         }
+
 
 
         [Authorize]

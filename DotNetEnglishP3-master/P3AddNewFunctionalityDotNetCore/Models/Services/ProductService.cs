@@ -90,28 +90,28 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
                 _productRepository.UpdateProductStocks(line.Product.Id, line.Quantity);
             }
         }
-        public List<string> CheckProductModelErrors(ProductViewModel product)
-        {
-            List<string> modelErrors = new List<string>();
 
-            // Perform model validation using Data Annotations
-            var validationContext = new ValidationContext(product);
-            var validationResults = new List<ValidationResult>();
 
-            bool isValid = Validator.TryValidateObject(product, validationContext, validationResults, true);
+        //public List<string> CheckProductModelErrors(ProductViewModel product)
+        //{
 
-            if (!isValid)
-            {
-                foreach (var validationResult in validationResults)
-                {
-                    // Check if the error message is localized
-                    string localizedErrorMessage = _localizer[validationResult.ErrorMessage] ?? validationResult.ErrorMessage;
-                    modelErrors.Add(localizedErrorMessage);
-                }
-            }
+        //    // Perform model validation using Data Annotations
+        //    var validationContext = new ValidationContext(product);
+        //    var validationResults = new List<ValidationResult>();
 
-            return modelErrors;
-        }
+        //    bool isValid = Validator.TryValidateObject(product, validationContext, validationResults, validateAllProperties: true);
+        //    if (!isValid)
+        //    {
+        //        foreach (var validationResult in validationResults)
+        //        {
+        //            // Check if the error message is localized
+        //            string localizedErrorMessage = _localizer[validationResult.ErrorMessage] ?? validationResult.ErrorMessage;
+        //            modelErrors.Add(localizedErrorMessage);
+        //        }
+        //    }
+
+        //    return modelErrors;
+        //}
 
         public void SaveProduct(ProductViewModel product)
         {

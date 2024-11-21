@@ -11,6 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using P3AddNewFunctionalityDotNetCore;
 using System.Linq;
+using Microsoft.AspNetCore.Localization;
+using System.Collections.Generic;
+using System.Globalization;
 
 // This file is the entry point of the application.
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +37,25 @@ builder.Services.AddMvc()
     // Add support for localized views
     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix, opts => { opts.ResourcesPath = "Resources"; })
     .AddDataAnnotationsLocalization();
+builder.Services.Configure<RequestLocalizationOptions>(opts =>
+{
+    var supportedCultures = new List<CultureInfo>
+                //add required cultures
+        {
+            new CultureInfo("en-GB"),
+            new CultureInfo("en-US"),
+            new CultureInfo("en"),
+            new CultureInfo("fr-FR"),
+            new CultureInfo("fr"),
+            new CultureInfo("es-ES"),
+            new CultureInfo("es")
+        };
+    //set default to english
+    opts.DefaultRequestCulture = new RequestCulture("en");
+    opts.SupportedCultures = supportedCultures;
+    opts.SupportedUICultures = supportedCultures;
+});
+        
 
 // Database configuration
 builder.Services.AddDbContext<P3Referential>(options =>

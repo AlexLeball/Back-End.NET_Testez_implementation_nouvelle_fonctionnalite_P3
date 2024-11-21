@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Localization;
 using System;
+using P3AddNewFunctionalityDotNetCore.Models.ViewModels;
 using System.ComponentModel.DataAnnotations;
 
 namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
@@ -26,15 +27,6 @@ namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
         public double Price { get; set; }
     }
 
-    public class RequiredLocalizedAttribute : RequiredAttribute
-    {
-        private readonly string _resourceKey;
-
-        public RequiredLocalizedAttribute(string resourceKey)
-        {
-            _resourceKey = resourceKey;
-        }
-   
-    }
+    
 }
 
