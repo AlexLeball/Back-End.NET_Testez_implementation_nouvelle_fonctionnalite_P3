@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Localization;
 using System.ComponentModel.DataAnnotations;
 
 namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
 {
-    public class RequiredLocalizedAttribute : RequiredAttribute
+    public class RequiredLocalized : RequiredAttribute
     {
         private readonly string _resourceKey;
 
-        public RequiredLocalizedAttribute(string resourceKey)
+        public RequiredLocalized(string resourceKey)
         {
-            _resourceKey = resourceKey;
+            _resourceKey = resourceKey; 
         }
 
     }
@@ -25,19 +24,19 @@ namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
         [BindNever]
         public ICollection<CartLine> Lines { get; set; }
 
-        [RequiredLocalizedAttribute("ErrorMissingName")]
+        [RequiredLocalized("ErrorMissingName")]
         public string Name { get; set; }
 
-        [RequiredLocalizedAttribute("ErrorMissingAddress")]
+        [RequiredLocalized("ErrorMissingAddress")]
         public string Address { get; set; }
 
-        [RequiredLocalizedAttribute("ErrorMissingCity")]
+        [RequiredLocalized("ErrorMissingCity")]
         public string City { get; set; }
 
-        [RequiredLocalizedAttribute("ErrorMissingZipCode")]
+        [RequiredLocalized("ErrorMissingZipCode")]
         public string Zip { get; set; }
 
-        [RequiredLocalizedAttribute("ErrorMissingCountry")]
+        [RequiredLocalized("ErrorMissingCountry")]
         public string Country { get; set; }
 
         [BindNever]

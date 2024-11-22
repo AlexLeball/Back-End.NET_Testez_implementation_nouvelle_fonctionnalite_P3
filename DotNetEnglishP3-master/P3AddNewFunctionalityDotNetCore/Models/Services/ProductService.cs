@@ -35,7 +35,7 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
 
         private static List<ProductViewModel> MapToViewModel(IEnumerable<Product> productEntities)
         {
-            List <ProductViewModel> products = new List<ProductViewModel>();
+            List <ProductViewModel> products = new();
             foreach (Product product in productEntities)
             {
                 products.Add(new ProductViewModel
@@ -91,27 +91,24 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
             }
         }
 
+        public List<string> CheckProductModelErrors(ProductViewModel product)
+        {
+            var modelErrors = new List<string>();
 
-        //public List<string> CheckProductModelErrors(ProductViewModel product)
-        //{
+            // Perform model validation using Data Annotations
+            var validationContext = new ValidationContext(product);
+            var validationResults = new List<ValidationResult>();
 
-        //    // Perform model validation using Data Annotations
-        //    var validationContext = new ValidationContext(product);
-        //    var validationResults = new List<ValidationResult>();
+            Validator.TryValidateObject(product, validationContext, validationResults, validateAllProperties: true);
 
-        //    bool isValid = Validator.TryValidateObject(product, validationContext, validationResults, validateAllProperties: true);
-        //    if (!isValid)
-        //    {
-        //        foreach (var validationResult in validationResults)
-        //        {
-        //            // Check if the error message is localized
-        //            string localizedErrorMessage = _localizer[validationResult.ErrorMessage] ?? validationResult.ErrorMessage;
-        //            modelErrors.Add(localizedErrorMessage);
-        //        }
-        //    }
+            foreach (var validationResult in validationResults)
+            {
+                modelErrors.Add(validationResult.ErrorMessage);
+            }
 
-        //    return modelErrors;
-        //}
+            return modelErrors;
+        }
+
 
         public void SaveProduct(ProductViewModel product)
         {
@@ -121,7 +118,7 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
 
         private static Product MapToProductEntity(ProductViewModel product)
         {
-            Product productEntity = new Product
+            Product productEntity = new()
             {
                 Name = product.Name,
                 Price = product.Price,

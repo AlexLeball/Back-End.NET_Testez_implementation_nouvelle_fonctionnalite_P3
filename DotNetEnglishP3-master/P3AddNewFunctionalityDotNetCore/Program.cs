@@ -34,28 +34,28 @@ builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddMvc()
-    // Add support for localized views
     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix, opts => { opts.ResourcesPath = "Resources"; })
     .AddDataAnnotationsLocalization();
+
+
 builder.Services.Configure<RequestLocalizationOptions>(opts =>
 {
     var supportedCultures = new List<CultureInfo>
-                //add required cultures
-        {
-            new CultureInfo("en-GB"),
-            new CultureInfo("en-US"),
-            new CultureInfo("en"),
-            new CultureInfo("fr-FR"),
-            new CultureInfo("fr"),
-            new CultureInfo("es-ES"),
-            new CultureInfo("es")
-        };
-    //set default to english
-    opts.DefaultRequestCulture = new RequestCulture("en");
+    {
+        new CultureInfo("en"),      // Default language
+        new CultureInfo("en-GB"),
+        new CultureInfo("en-US"),
+        new CultureInfo("fr-FR"),
+        new CultureInfo("fr"),
+        new CultureInfo("es-ES"),
+        new CultureInfo("es")
+    };
+
+    opts.DefaultRequestCulture = new RequestCulture("en"); // Default to "en"
     opts.SupportedCultures = supportedCultures;
     opts.SupportedUICultures = supportedCultures;
 });
-        
+
 
 // Database configuration
 builder.Services.AddDbContext<P3Referential>(options =>
@@ -88,10 +88,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 // Localization configuration
-var supportedCultures = new[] { "en-GB", "en-US", "en", "fr-FR", "fr" };
-var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
-    .AddSupportedCultures(supportedCultures.ToArray())
+var supportedCultures = new[] { "en", "en-GB", "en-US", "fr-FR", "fr", "es-ES", "es" };
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture("en")
+    .AddSupportedCultures(supportedCultures)
     .AddSupportedUICultures(supportedCultures);
+
 app.UseRequestLocalization(localizationOptions);
 
 
