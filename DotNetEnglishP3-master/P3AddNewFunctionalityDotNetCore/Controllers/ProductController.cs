@@ -40,14 +40,31 @@ namespace P3AddNewFunctionalityDotNetCore.Controllers
         }
 
         [Authorize]
+
         [HttpPost]
         public IActionResult Create(ProductViewModel product)
         {
+            // Validate the product using ProductService
+            var errors = _productService.CheckProductModelErrors(product);
+
+            if (errors.Any())
+            {
+                // Add errors to ModelState to display them in the view
+                foreach (var error in errors)
+                {
+                    ModelState.AddModelError(string.Empty, _localizer[error]);
+                }
+
+                // Return the view with the current model to show validation errors
+                return View(product);
+            }
+
+            // Save the product if no errors
             _productService.SaveProduct(product);
-            return RedirectToAction("Admin");
+
+            // Redirect to a success page or product list
+            return RedirectToAction(nameof(Admin));
         }
-
-
 
         [Authorize]
         [HttpPost]

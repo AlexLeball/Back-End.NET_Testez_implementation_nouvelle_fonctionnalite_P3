@@ -88,13 +88,13 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 // Localization configuration
-var supportedCultures = new[] { "en", "en-GB", "en-US", "fr-FR", "fr", "es-ES", "es" };
-var localizationOptions = new RequestLocalizationOptions()
-    .SetDefaultCulture("en")
-    .AddSupportedCultures(supportedCultures)
-    .AddSupportedUICultures(supportedCultures);
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en"),
+    SupportedCultures = new[] { new CultureInfo("en"), new CultureInfo("fr") },
+    SupportedUICultures = new[] { new CultureInfo("en"), new CultureInfo("fr") }
+});
 
-app.UseRequestLocalization(localizationOptions);
 
 
 app.UseSession();

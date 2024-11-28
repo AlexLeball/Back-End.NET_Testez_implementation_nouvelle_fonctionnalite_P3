@@ -103,11 +103,13 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
 
             foreach (var validationResult in validationResults)
             {
-                modelErrors.Add(validationResult.ErrorMessage);
+                // Use _localizer to fetch the localized message
+                string localizedMessage = _localizer[validationResult.ErrorMessage];
+                modelErrors.Add(localizedMessage);
             }
-
             return modelErrors;
         }
+
 
 
         public void SaveProduct(ProductViewModel product)
