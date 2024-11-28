@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Resources\Models\Order.en.resx" />
+    <None Include="Resources\Models\ViewModels\Order.en.resx" />
   </ItemGroup>
 
   <ItemGroup>

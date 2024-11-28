@@ -103,8 +103,8 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
 
             foreach (var validationResult in validationResults)
             {
-                // Use _localizer to fetch the localized message
-                string localizedMessage = _localizer[validationResult.ErrorMessage];
+                //// Use _localizer to fetch the localized message
+                string localizedMessage = validationResult.ErrorMessage;
                 modelErrors.Add(localizedMessage);
             }
             return modelErrors;

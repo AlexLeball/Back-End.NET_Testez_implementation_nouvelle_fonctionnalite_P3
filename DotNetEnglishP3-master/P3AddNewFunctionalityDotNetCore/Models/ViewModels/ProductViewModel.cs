@@ -11,20 +11,20 @@ namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
         [BindNever]
         public int Id { get; set; }
 
-        [Required]
+        [RequiredLocalized("ErrorMissingName")]
         public string Name { get; set; }
 
         public string Description { get; set; }
 
         public string Details { get; set; }
 
-        [Required]
-        [Range(1, int.MaxValue)]
+        [RequiredLocalized("ErrorStockValue")]
+        [Range(1, int.MaxValue, ErrorMessage = "Stock must be at least 1")]
         public int Stock { get; set; }
 
-        [Required]
-        [Range(0.01, double.MaxValue)]
+        [RequiredLocalized("ErrorPriceValue")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero")]
         public double Price { get; set; }
     }
-}
 
+}

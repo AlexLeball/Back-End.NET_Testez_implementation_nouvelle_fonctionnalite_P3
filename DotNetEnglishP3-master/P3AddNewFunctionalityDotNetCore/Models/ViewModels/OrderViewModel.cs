@@ -6,6 +6,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
 {
+    public class RequiredLocalized : RequiredAttribute
+    {
+        private readonly string _resourceKey;
+
+        public RequiredLocalized(string resourceKey)
+        {
+            _resourceKey = resourceKey;
+        }
+
+    }
     public class OrderViewModel
     {
         [BindNever]
@@ -14,19 +24,19 @@ namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
         [BindNever]
         public ICollection<CartLine> Lines { get; set; }
 
-        [Required]
+        [RequiredLocalized("ErrorMissingName")]
         public string Name { get; set; }
 
-        [Required]
+        [RequiredLocalized("ErrorMissingAddress")]
         public string Address { get; set; }
 
-        [Required]
+        [RequiredLocalized("ErrorMissingCity")]
         public string City { get; set; }
 
-        [Required]
+        [RequiredLocalized("ErrorMissingZipCode")]
         public string Zip { get; set; }
 
-        [Required]
+        [RequiredLocalized("ErrorMissingCountry")]
         public string Country { get; set; }
 
         [BindNever]
