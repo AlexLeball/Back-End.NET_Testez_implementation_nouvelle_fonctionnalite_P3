@@ -126,10 +126,10 @@
   <data name="ErrorMissingStock" xml:space="preserve">
     <value>Veuillez saisir un stock</value>
   </data>
-  <data name="ErrorPriceValue" xml:space="preserve">
-    <value>Le prix doit être un nombre supérieur à zéro</value>
-  </data>
   <data name="ErrorStockValue" xml:space="preserve">
     <value>Le stock doit être un nombre supérieur à zéro</value>
+  </data>
+  <data name="ErrorPriceValue1" xml:space="preserve">
+    <value>Le prix doit être un nombre supérieur à zéro</value>
   </data>
 </root>

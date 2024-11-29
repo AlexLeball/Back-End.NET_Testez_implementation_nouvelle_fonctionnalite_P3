@@ -44,25 +44,18 @@ namespace P3AddNewFunctionalityDotNetCore.Controllers
         [HttpPost]
         public IActionResult Create(ProductViewModel product)
         {
-            // Validate the product using ProductService
-            var errors = _productService.CheckProductModelErrors(product);
-
-            if (errors.Any())
+            if (!ModelState.IsValid)
             {
-                // Add errors to ModelState to display them in the view
-                foreach (var error in errors)
-                {
-                    ModelState.AddModelError(string.Empty, _localizer[error]);
-                }
+                // Use IStringLocalizer directly in the controller to add localized error messages
+                ModelState.AddModelError("Name", _localizer["ErrorMissingName"]);
+                ModelState.AddModelError("Stock", _localizer["ErrorStockValue"]);
+                ModelState.AddModelError("Price", _localizer["ErrorPriceValue"]);
 
-                // Return the view with the current model to show validation errors
                 return View(product);
             }
 
-            // Save the product if no errors
+            // If no validation errors, save the product
             _productService.SaveProduct(product);
-
-            // Redirect to a success page or product list
             return RedirectToAction(nameof(Admin));
         }
 

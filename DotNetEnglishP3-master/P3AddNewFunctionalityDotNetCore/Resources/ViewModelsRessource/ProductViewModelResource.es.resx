@@ -126,10 +126,10 @@
   <data name="ErrorMissingStock" xml:space="preserve">
     <value>Por favor, introduzca un stock</value>
   </data>
-  <data name="ErrorPriceValue" xml:space="preserve">
-    <value>Por favor, introduzca un value</value>
-  </data>
   <data name="ErrorStockValue" xml:space="preserve">
     <value>Por favor, introduzca un nombre</value>
+  </data>
+  <data name="ErrorPriceValue1" xml:space="preserve">
+    <value>Por favor, introduzca un value</value>
   </data>
 </root>

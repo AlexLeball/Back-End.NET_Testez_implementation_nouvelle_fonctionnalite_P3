@@ -14,6 +14,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Localization;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.Extensions.Options;
 
 // This file is the entry point of the application.
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//Localization builder
+// Localization builder setup
 builder.Services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
 
 //Services and Repositories
@@ -33,29 +34,29 @@ builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
+// Configure MVC with localization
 builder.Services.AddMvc()
     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix, opts => { opts.ResourcesPath = "Resources"; })
     .AddDataAnnotationsLocalization();
 
+// Configure Request Localization options
+var supportedCultures = new List<CultureInfo>
+{
+    new CultureInfo("en"),      // Default language
+    new CultureInfo("en-GB"),
+    new CultureInfo("en-US"),
+    new CultureInfo("fr-FR"),
+    new CultureInfo("fr"),
+    new CultureInfo("es-ES"),
+    new CultureInfo("es")
+};
 
 builder.Services.Configure<RequestLocalizationOptions>(opts =>
 {
-    var supportedCultures = new List<CultureInfo>
-    {
-        new CultureInfo("en"),      // Default language
-        new CultureInfo("en-GB"),
-        new CultureInfo("en-US"),
-        new CultureInfo("fr-FR"),
-        new CultureInfo("fr"),
-        new CultureInfo("es-ES"),
-        new CultureInfo("es")
-    };
-
-    opts.DefaultRequestCulture = new RequestCulture("en"); // Default to "en"
+    opts.DefaultRequestCulture = new RequestCulture("en"); // Default culture
     opts.SupportedCultures = supportedCultures;
     opts.SupportedUICultures = supportedCultures;
 });
-
 
 // Database configuration
 builder.Services.AddDbContext<P3Referential>(options =>
@@ -84,23 +85,18 @@ else
     app.SeedDatabase(app.Configuration);
 }
 
+
+/// <summary> 
+/// Localization configuration
+/// </summary>
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-// Localization configuration
-app.UseRequestLocalization(new RequestLocalizationOptions
-{
-    DefaultRequestCulture = new RequestCulture(""),
-    SupportedCultures = new[] { new CultureInfo("en"), new CultureInfo("fr"), new CultureInfo("es") },
-    SupportedUICultures = new[] { new CultureInfo("en"), new CultureInfo("fr"), new CultureInfo("es") }
-});
-
-
+app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
 app.UseSession();
-
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -1,21 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Extensions.Localization;
 using System.ComponentModel.DataAnnotations;
+using P3AddNewFunctionalityDotNetCore.Resources.ViewModelsRessource;
 
 namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
 {
-    public class RequiredLocalized : RequiredAttribute
-    {
-        private readonly string _resourceKey;
-
-        public RequiredLocalized(string resourceKey)
-        {
-            _resourceKey = resourceKey;
-        }
-
-    }
     public class OrderViewModel
     {
         [BindNever]
@@ -24,22 +14,24 @@ namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
         [BindNever]
         public ICollection<CartLine> Lines { get; set; }
 
-        [RequiredLocalized("ErrorMissingName")]
+        // Reference the resource class and resource name for error message localization
+        [Required(ErrorMessageResourceName = "ErrorMissingName", ErrorMessageResourceType = typeof(OrderViewModelResource))]
         public string Name { get; set; }
 
-        [RequiredLocalized("ErrorMissingAddress")]
+        [Required(ErrorMessageResourceName = "ErrorMissingAddress", ErrorMessageResourceType = typeof(OrderViewModelResource))]
         public string Address { get; set; }
 
-        [RequiredLocalized("ErrorMissingCity")]
+        [Required(ErrorMessageResourceName = "ErrorMissingCity", ErrorMessageResourceType = typeof(OrderViewModelResource))]
         public string City { get; set; }
 
-        [RequiredLocalized("ErrorMissingZipCode")]
+        [Required(ErrorMessageResourceName = "ErrorMissingZipCode", ErrorMessageResourceType = typeof(OrderViewModelResource))]
         public string Zip { get; set; }
 
-        [RequiredLocalized("ErrorMissingCountry")]
+        [Required(ErrorMessageResourceName = "ErrorMissingCountry", ErrorMessageResourceType = typeof(OrderViewModelResource))]
         public string Country { get; set; }
 
         [BindNever]
         public DateTime Date { get; set; }
     }
 }
+
