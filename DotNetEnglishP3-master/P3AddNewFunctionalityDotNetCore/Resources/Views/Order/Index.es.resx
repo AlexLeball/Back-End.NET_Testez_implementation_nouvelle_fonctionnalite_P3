@@ -117,25 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="MissingName" xml:space="preserve">
-    <value>The Name field is required.</value>
+  <data name="Address" xml:space="preserve">
+    <value>dirreccion</value>
   </data>
-  <data name="MissingPrice" xml:space="preserve">
-    <value>Please enter a price</value>
+  <data name="City" xml:space="preserve">
+    <value>ciudad</value>
   </data>
-  <data name="MissingStock" xml:space="preserve">
-    <value>Please enter a stock value</value>
+  <data name="CompleteOrder" xml:space="preserve">
+    <value>completar pedido</value>
   </data>
-  <data name="PriceNotANumber" xml:space="preserve">
-    <value>The value entered for the price must be a number</value>
+  <data name="Country" xml:space="preserve">
+    <value>pais</value>
   </data>
-  <data name="PriceNotGreaterThanZero" xml:space="preserve">
-    <value>Price must be greater than zero</value>
+  <data name="EnterDetails" xml:space="preserve">
+    <value>Por favor ingrese sus datos y enviaremos sus productos de inmediato!</value>
   </data>
-  <data name="StockNotAnInteger" xml:space="preserve">
-    <value>The value entered for the stock must be a integer</value>
+  <data name="Location" xml:space="preserve">
+    <value>ubicación</value>
   </data>
-  <data name="StockNotGreaterThanZero" xml:space="preserve">
-    <value>The stock must greater than zero</value>
+  <data name="Name" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="OrderTitle" xml:space="preserve">
+    <value>por favor, complete la compra</value>
+  </data>
+  <data name="ShipSoon" xml:space="preserve">
+    <value>Enviaremos sus productos lo antes posible</value>
+  </data>
+  <data name="Zip" xml:space="preserve">
+    <value>código postal</value>
   </data>
 </root>

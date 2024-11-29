@@ -127,7 +127,7 @@
     <value>Please enter a country name</value>
   </data>
   <data name="ErrorMissingName" xml:space="preserve">
-    <value>The Name field is required.</value>
+    <value>Please enter a name</value>
   </data>
   <data name="ErrorMissingZipCode" xml:space="preserve">
     <value>Please enter the zip code</value>

@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Extensions.Localization;
 using System;
-using P3AddNewFunctionalityDotNetCore.Models.ViewModels;
 using System.ComponentModel.DataAnnotations;
 
 namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels

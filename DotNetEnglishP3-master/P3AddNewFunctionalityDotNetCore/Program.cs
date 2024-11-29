@@ -90,9 +90,9 @@ app.UseStaticFiles();
 // Localization configuration
 app.UseRequestLocalization(new RequestLocalizationOptions
 {
-    DefaultRequestCulture = new RequestCulture("en"),
-    SupportedCultures = new[] { new CultureInfo("en"), new CultureInfo("fr") },
-    SupportedUICultures = new[] { new CultureInfo("en"), new CultureInfo("fr") }
+    DefaultRequestCulture = new RequestCulture(""),
+    SupportedCultures = new[] { new CultureInfo("en"), new CultureInfo("fr"), new CultureInfo("es") },
+    SupportedUICultures = new[] { new CultureInfo("en"), new CultureInfo("fr"), new CultureInfo("es") }
 });
 
 

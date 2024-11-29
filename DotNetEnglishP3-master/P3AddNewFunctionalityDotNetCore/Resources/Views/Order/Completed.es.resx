@@ -117,19 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ErrorMissingName" xml:space="preserve">
-    <value>Please enter a name</value>
+  <data name="DemoEnding" xml:space="preserve">
+    <value>Estamos ocupándonos de su pedido. La demostración ha terminado, haga clic en el logo para reiniciar</value>
   </data>
-  <data name="ErrorMissingPrice" xml:space="preserve">
-    <value>Please enter a price value</value>
-  </data>
-  <data name="ErrorMissingStock" xml:space="preserve">
-    <value>Please enter a stock value</value>
-  </data>
-  <data name="ErrorPriceValue" xml:space="preserve">
-    <value>The price value must be a number greater than zero</value>
-  </data>
-  <data name="ErrorStockValue" xml:space="preserve">
-    <value>The stock value must be a number greater than zero</value>
+  <data name="Thanks" xml:space="preserve">
+    <value>Gracias</value>
   </data>
 </root>

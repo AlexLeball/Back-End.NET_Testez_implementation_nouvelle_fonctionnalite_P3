@@ -117,19 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ErrorMissingAddress" xml:space="preserve">
-    <value>Please enter an address</value>
-  </data>
-  <data name="ErrorMissingCity" xml:space="preserve">
-    <value>Please enter a city name</value>
-  </data>
-  <data name="ErrorMissingCountry" xml:space="preserve">
-    <value>Please enter a country name</value>
-  </data>
   <data name="ErrorMissingName" xml:space="preserve">
-    <value>The Name field is required.</value>
+    <value>Por favor, introduzca un nombre</value>
   </data>
-  <data name="ErrorMissingZipCode" xml:space="preserve">
-    <value>Please enter the zip code</value>
+  <data name="ErrorMissingPrice" xml:space="preserve">
+    <value>Por favor ingresa un precio</value>
+  </data>
+  <data name="ErrorMissingStock" xml:space="preserve">
+    <value>Por favor, introduzca un stock</value>
+  </data>
+  <data name="ErrorPriceValue" xml:space="preserve">
+    <value>El valor del precio debe ser un número mayor que cero.</value>
+  </data>
+  <data name="ErrorStockValue" xml:space="preserve">
+    <value>El valor del stock debe ser un número mayor que cero.</value>
   </data>
 </root>
