@@ -19,16 +19,16 @@ namespace P3AddNewFunctionalityDotNetCoreInteg.Tests
         private readonly IOrderRepository _orderRepository;
         private readonly IStringLocalizer<ProductService> _stringLocalizerMock;
 
-        // Constructor to configure the context to connect to SQL Server
+        // Constructor where we configure the context to connect to SQL Server
         public ProductIntegrationTests()
         {
             var options = new DbContextOptionsBuilder<P3Referential>()
-                .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=P3ReferentialTestDB;Trusted_Connection=True;") // Use  test database connection string here
+                .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=P3ReferentialTestDB;Trusted_Connection=True;") // Use your real test database connection string here
                 .Options;
 
             _context = new P3Referential(options);
 
-            // Clear the database before running the tests
+            // Optionally, you can clear and reset the database here (before each test) if needed.
             _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
         }
