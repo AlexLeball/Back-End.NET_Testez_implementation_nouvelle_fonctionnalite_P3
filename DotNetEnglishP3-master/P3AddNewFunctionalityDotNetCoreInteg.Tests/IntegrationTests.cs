@@ -1,31 +1,29 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
-using System;
 using P3AddNewFunctionalityDotNetCore.Data;
-using P3AddNewFunctionalityDotNetCore.Models;
-using System.Linq;
-using System.Collections.Generic;
 using P3AddNewFunctionalityDotNetCore.Models.Entities;
 
-public class ProductIntegrationTests : IDisposable
+public class IntegrationTests : IDisposable
 {
     private readonly P3Referential _context;
 
-    public ProductIntegrationTests()
+    public IntegrationTests()
     {
-        // Load configuration from appsettings.test.json
+        // Configuration from appsettings.test.json
         var configuration = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)  // Ensure it gets the correct directory
-            .AddJsonFile("appsettings.test.json")  // Add the test-specific configuration file
+            // Ensure it gets the correct directory
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            // Test-specific configuration file
+            .AddJsonFile("appsettings.test.json")
             .Build();
 
         // Set up the database context using the test database connection string
         var options = new DbContextOptionsBuilder<P3Referential>()
-            .UseSqlServer(configuration.GetConnectionString("P3Referential"))  // Use test DB connection string
+            // Test DB connection string
+            .UseSqlServer(configuration.GetConnectionString("P3Referential"))
             .Options;
 
-        _context = new P3Referential(options);
+        _context = new P3Referential(options, configuration);
 
         // Ensure the database is clean and created before tests run
         _context.Database.EnsureDeleted();

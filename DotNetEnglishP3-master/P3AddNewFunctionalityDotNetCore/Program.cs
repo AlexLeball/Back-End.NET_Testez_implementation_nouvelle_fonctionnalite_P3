@@ -71,6 +71,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = "/Account/Login";
 });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

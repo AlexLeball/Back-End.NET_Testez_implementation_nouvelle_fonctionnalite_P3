@@ -16,10 +16,6 @@ namespace P3AddNewFunctionalityDotNetCore.Data
             DbConnection = new SqlConnection(config.GetConnectionString("P3Referential"));
         }
 
-        public P3Referential(DbContextOptions options) : base(options)
-        {
-        }
-
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderLine> OrderLine { get; set; }
         public virtual DbSet<Product> Product { get; set; }

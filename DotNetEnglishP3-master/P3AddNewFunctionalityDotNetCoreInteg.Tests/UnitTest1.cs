@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using P3AddNewFunctionalityDotNetCore;
 using P3AddNewFunctionalityDotNetCore.Data;
@@ -7,6 +8,7 @@ using P3AddNewFunctionalityDotNetCore.Models.Entities;
 using P3AddNewFunctionalityDotNetCore.Models.Repositories;
 using P3AddNewFunctionalityDotNetCore.Models.Services;
 using Xunit;
+using System.Linq;
 
 namespace P3AddNewFunctionalityDotNetCoreInteg.Tests
 {
@@ -17,16 +19,28 @@ namespace P3AddNewFunctionalityDotNetCoreInteg.Tests
         private readonly IProductRepository _productRepository;
         private readonly ICart _cart;
         private readonly IOrderRepository _orderRepository;
-        private readonly IStringLocalizer<ProductService> _stringLocalizerMock;
+        private readonly IStringLocalizer<ProductService> _stringLocalizer;
 
         // Constructor where we configure the context to connect to SQL Server
         public ProductIntegrationTests()
         {
+            // In-memory configuration for testing
+            var inMemorySettings = new Dictionary<string, string>
+            {
+                { "ConnectionStrings:P3Referential", "Server=(localdb)\\mssqllocaldb;Database=P3ReferentialTestDB;Trusted_Connection=True;" }
+            };
+
+            var configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(inMemorySettings)
+                .Build();
+
+            // Use DbContextOptionsBuilder to set up the context
             var options = new DbContextOptionsBuilder<P3Referential>()
-                .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=P3ReferentialTestDB;Trusted_Connection=True;") // Use your real test database connection string here
+                .UseSqlServer(configuration.GetConnectionString("P3Referential"))
                 .Options;
 
-            _context = new P3Referential(options);
+            // Pass both options and the configuration to P3Referential
+            _context = new P3Referential(options, configuration);
 
             // Optionally, you can clear and reset the database here (before each test) if needed.
             _context.Database.EnsureDeleted();
@@ -56,7 +70,7 @@ namespace P3AddNewFunctionalityDotNetCoreInteg.Tests
             Assert.Equal(25, productFromDb.Quantity); // Validate the stock
         }
 
-        // test for updates brought by the administator if deleted or not
+        // Test for deletion of a product
         [Fact]
         public void DeleteProduct_ShouldRemoveFromDatabase()
         {
