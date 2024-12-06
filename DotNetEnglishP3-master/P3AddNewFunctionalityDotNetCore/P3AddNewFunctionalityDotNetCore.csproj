@@ -38,7 +38,7 @@
 
   <ItemGroup>
     <None Include="Resources\ViewModelsRessource\Order.es.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </None>
   </ItemGroup>
 
@@ -87,47 +87,47 @@
 
   <ItemGroup>
     <EmbeddedResource Update="Resources\ViewModelsRessource\LanguageViewModel.es.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ViewModelsRessource\LanguageViewModel.fr.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ViewModelsRessource\LanguageViewModel.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>LanguageViewModel.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ViewModelsRessource\Order.fr.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ViewModelsRessource\Order.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Order.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ViewModelsRessource\OrderViewModelResource.es.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ViewModelsRessource\OrderViewModelResource.fr.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ViewModelsRessource\OrderViewModelResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>OrderViewModelResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ViewModelsRessource\Product.es.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ViewModelsRessource\Product.fr.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ViewModelsRessource\Product.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Product.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ViewModelsRessource\ProductViewModelResource.es.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ViewModelsRessource\ProductViewModelResource.fr.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ViewModelsRessource\ProductViewModelResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
