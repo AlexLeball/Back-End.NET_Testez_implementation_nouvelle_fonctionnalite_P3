@@ -1,26 +1,28 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Xunit;
+using System;
 using P3AddNewFunctionalityDotNetCore.Data;
+using P3AddNewFunctionalityDotNetCore.Models;
+using System.Linq;
+using System.Collections.Generic;
 using P3AddNewFunctionalityDotNetCore.Models.Entities;
 
-public class IntegrationTests : IDisposable
+public class ProductIntegrationTests : IDisposable
 {
     private readonly P3Referential _context;
 
-    public IntegrationTests()
+    public ProductIntegrationTests()
     {
-        // Configuration from appsettings.test.json
+        // Load configuration from appsettings.test.json
         var configuration = new ConfigurationBuilder()
-            // Ensure it gets the correct directory
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            // Test-specific configuration file
-            .AddJsonFile("appsettings.test.json")
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)  // Ensure it gets the correct directory
+            .AddJsonFile("appsettings.test.json")  // Add the test-specific configuration file
             .Build();
 
         // Set up the database context using the test database connection string
         var options = new DbContextOptionsBuilder<P3Referential>()
-            // Test DB connection string
-            .UseSqlServer(configuration.GetConnectionString("P3Referential"))
+            .UseSqlServer(configuration.GetConnectionString("P3Referential"))  // Use test DB connection string
             .Options;
 
         _context = new P3Referential(options, configuration);
@@ -91,6 +93,8 @@ public class IntegrationTests : IDisposable
         var allProducts = _context.Product.ToList();
         Assert.DoesNotContain(newProduct, allProducts); // Ensure the deleted product is not in the list anymore
     }
+
+
 
     // Clean up the context after tests run
     public void Dispose()
