@@ -1,12 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Localization;
-using Moq;
 using P3AddNewFunctionalityDotNetCore.Data;
 using P3AddNewFunctionalityDotNetCore.Models;
 using P3AddNewFunctionalityDotNetCore.Models.Repositories;
 using P3AddNewFunctionalityDotNetCore.Models.Services;
 using P3AddNewFunctionalityDotNetCore.Models.ViewModels;
+
 
 namespace P3AddNewFunctionalityDotNetCoreInteg.Tests
 {
@@ -14,7 +13,8 @@ namespace P3AddNewFunctionalityDotNetCoreInteg.Tests
     {
         private readonly P3Referential _context;
         private readonly ProductService _productService;
-        private readonly Mock<IStringLocalizer<ProductService>> _mockStringLocalizer;
+        private readonly Cart _cart;
+        private readonly OrderRepository _orderRepository;
 
         public ProductIntegrationTests()
         {
@@ -40,18 +40,17 @@ namespace P3AddNewFunctionalityDotNetCoreInteg.Tests
             _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
 
-            // Initialize repositories and mocks
+            // Initialize concrete implementations
             var productRepository = new ProductRepository(_context);
-            var mockCart = new Mock<ICart>();
-            var mockOrderRepository = new Mock<IOrderRepository>();
-            _mockStringLocalizer = new Mock<IStringLocalizer<ProductService>>();
+            _cart = new Cart();
+            _orderRepository = new OrderRepository(_context);
 
-            // Initialize ProductService
+            // Initialize ProductService with no mocked dependencies
             _productService = new ProductService(
-                mockCart.Object,
+                _cart,
                 productRepository,
-                mockOrderRepository.Object,
-                _mockStringLocalizer.Object
+                _orderRepository,
+                null // No localization for integration tests
             );
         }
 
