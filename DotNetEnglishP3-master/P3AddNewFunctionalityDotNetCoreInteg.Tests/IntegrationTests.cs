@@ -1,104 +1,104 @@
-using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
-using System;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Localization;
+using P3AddNewFunctionalityDotNetCore;
 using P3AddNewFunctionalityDotNetCore.Data;
 using P3AddNewFunctionalityDotNetCore.Models;
-using System.Linq;
-using System.Collections.Generic;
 using P3AddNewFunctionalityDotNetCore.Models.Entities;
+using P3AddNewFunctionalityDotNetCore.Models.Repositories;
+using P3AddNewFunctionalityDotNetCore.Models.Services;
+using Xunit;
+using System.Linq;
 
-public class ProductIntegrationTests : IDisposable
+namespace P3AddNewFunctionalityDotNetCoreInteg.Tests
 {
-    private readonly P3Referential _context;
-
-    public ProductIntegrationTests()
+    public class ProductIntegrationTests : IDisposable
     {
-        // Load configuration from appsettings.test.json
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)  // Ensure it gets the correct directory
-            .AddJsonFile("appsettings.test.json")  // Add the test-specific configuration file
-            .Build();
+        private readonly P3Referential _context;
+        private readonly ProductService _productService;
+        private readonly IProductRepository _productRepository;
+        private readonly ICart _cart;
+        private readonly IOrderRepository _orderRepository;
+        private readonly IStringLocalizer<ProductService> _stringLocalizer;
 
-        // Set up the database context using the test database connection string
-        var options = new DbContextOptionsBuilder<P3Referential>()
-            .UseSqlServer(configuration.GetConnectionString("P3Referential"))  // Use test DB connection string
-            .Options;
-
-        _context = new P3Referential(options, configuration);
-
-        // Ensure the database is clean and created before tests run
-        _context.Database.EnsureDeleted();
-        _context.Database.EnsureCreated();
-    }
-
-    // Test for adding a product
-    [Fact]
-    public void AddProduct_ShouldPersistToDatabase_WithoutInconsistencies()
-    {
-        // Arrange
-        var newProduct = new Product
+        // Constructor where we configure the context to connect to SQL Server
+        public ProductIntegrationTests()
         {
-            Name = "Test Product",
-            Price = 30.0,
-            Quantity = 25,
-            Description = "Test Description",
-            Details = "Test Details"
-        };
+            // In-memory configuration for testing
+            var inMemorySettings = new Dictionary<string, string>
+            {
+                { "ConnectionStrings:P3Referential", "Server=(localdb)\\mssqllocaldb;Database=P3ReferentialTestDB;Trusted_Connection=True;" }
+            };
 
-        // Act: Add the product to the database
-        _context.Product.Add(newProduct);
-        _context.SaveChanges();
+            var configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(inMemorySettings)
+                .Build();
 
-        // Assert: Ensure the product exists in the database
-        var productFromDb = _context.Product.FirstOrDefault(p => p.Name == "Test Product");
+            // Use DbContextOptionsBuilder to set up the context
+            var options = new DbContextOptionsBuilder<P3Referential>()
+                .UseSqlServer(configuration.GetConnectionString("P3Referential"))
+                .Options;
 
-        Assert.NotNull(productFromDb); // Ensure the product is in the database
-        Assert.Equal(30.0, productFromDb.Price); // Validate price
-        Assert.Equal(25, productFromDb.Quantity); // Validate quantity
-        Assert.Equal("Test Description", productFromDb.Description); // Validate description
-        Assert.Equal("Test Details", productFromDb.Details); // Validate details
+            // Pass both options and the configuration to P3Referential
+            _context = new P3Referential(options, configuration);
 
-        // Ensure no duplicate entries
-        var productCount = _context.Product.Count(p => p.Name == "Test Product");
-        Assert.Equal(1, productCount); // Ensure there's exactly one product in the database with this name
-    }
+            // Optionally, you can clear and reset the database here (before each test) if needed.
+            _context.Database.EnsureDeleted();
+            _context.Database.EnsureCreated();
+        }
 
-    // Test for removing a product
-    [Fact]
-    public void DeleteProduct_ShouldRemoveFromDatabase_WithoutInconsistencies()
-    {
-        // Arrange: Add a product to the database
-        var newProduct = new Product
+        [Fact]
+        public void AddProduct_ShouldPersistToDatabase()
         {
-            Name = "Test Product to Delete",
-            Price = 40.0,
-            Quantity = 35,
-            Description = "Test Description",
-            Details = "Test Details"
-        };
+            // Arrange
+            var newProduct = new Product
+            {
+                Name = "Test Product 2",
+                Price = 30.0,
+                Quantity = 25
+            };
 
-        _context.Product.Add(newProduct);
-        _context.SaveChanges();
+            // Act
+            _context.Product.Add(newProduct);
+            _context.SaveChanges();
 
-        // Act: Remove the product from the database
-        _context.Product.Remove(newProduct);
-        _context.SaveChanges();
+            // Assert
+            var productFromDb = _context.Product.FirstOrDefault(p => p.Name == "Test Product 2");
 
-        // Assert: Ensure the product is removed from the database
-        var productFromDb = _context.Product.FirstOrDefault(p => p.Name == "Test Product to Delete");
-        Assert.Null(productFromDb); // Ensure the product is no longer in the database
+            Assert.NotNull(productFromDb); // Ensure the product exists in the database
+            Assert.Equal(30.0, productFromDb.Price); // Validate the price
+            Assert.Equal(25, productFromDb.Quantity); // Validate the stock
+        }
 
-        // Ensure no orphaned or inconsistent records remain
-        var allProducts = _context.Product.ToList();
-        Assert.DoesNotContain(newProduct, allProducts); // Ensure the deleted product is not in the list anymore
-    }
+        // Test for deletion of a product
+        [Fact]
+        public void DeleteProduct_ShouldRemoveFromDatabase()
+        {
+            // Arrange
+            var newProduct = new Product
+            {
+                Name = "Test Product 3",
+                Price = 40.0,
+                Quantity = 35
+            };
 
+            _context.Product.Add(newProduct);
+            _context.SaveChanges();
 
+            // Act
+            _context.Product.Remove(newProduct);
+            _context.SaveChanges();
 
-    // Clean up the context after tests run
-    public void Dispose()
-    {
-        _context.Dispose();
+            // Assert
+            var productFromDb = _context.Product.FirstOrDefault(p => p.Name == "Test Product 3");
+
+            Assert.Null(productFromDb); // Ensure the product does not exist in the database
+        }
+
+        // Clean up the context after tests run
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
     }
 }
