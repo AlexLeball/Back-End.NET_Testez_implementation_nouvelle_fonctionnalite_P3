@@ -1,14 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
-using P3AddNewFunctionalityDotNetCore;
+using Moq;
 using P3AddNewFunctionalityDotNetCore.Data;
 using P3AddNewFunctionalityDotNetCore.Models;
-using P3AddNewFunctionalityDotNetCore.Models.Entities;
 using P3AddNewFunctionalityDotNetCore.Models.Repositories;
 using P3AddNewFunctionalityDotNetCore.Models.Services;
-using Xunit;
-using System.Linq;
+using P3AddNewFunctionalityDotNetCore.Models.ViewModels;
 
 namespace P3AddNewFunctionalityDotNetCoreInteg.Tests
 {
@@ -16,12 +14,8 @@ namespace P3AddNewFunctionalityDotNetCoreInteg.Tests
     {
         private readonly P3Referential _context;
         private readonly ProductService _productService;
-        private readonly IProductRepository _productRepository;
-        private readonly ICart _cart;
-        private readonly IOrderRepository _orderRepository;
-        private readonly IStringLocalizer<ProductService> _stringLocalizer;
+        private readonly Mock<IStringLocalizer<ProductService>> _mockStringLocalizer;
 
-        // Constructor where we configure the context to connect to SQL Server
         public ProductIntegrationTests()
         {
             // In-memory configuration for testing
@@ -39,60 +33,74 @@ namespace P3AddNewFunctionalityDotNetCoreInteg.Tests
                 .UseSqlServer(configuration.GetConnectionString("P3Referential"))
                 .Options;
 
-            // Pass both options and the configuration to P3Referential
+            // Initialize the DbContext
             _context = new P3Referential(options, configuration);
 
-            // Optionally, you can clear and reset the database here (before each test) if needed.
+            // Ensure the database is fresh for every test
             _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
+
+            // Initialize repositories and mocks
+            var productRepository = new ProductRepository(_context);
+            var mockCart = new Mock<ICart>();
+            var mockOrderRepository = new Mock<IOrderRepository>();
+            _mockStringLocalizer = new Mock<IStringLocalizer<ProductService>>();
+
+            // Initialize ProductService
+            _productService = new ProductService(
+                mockCart.Object,
+                productRepository,
+                mockOrderRepository.Object,
+                _mockStringLocalizer.Object
+            );
         }
 
         [Fact]
-        public void AddProduct_ShouldPersistToDatabase()
+        public void SaveProduct_ShouldPersistToDatabase()
         {
             // Arrange
-            var newProduct = new Product
+            var productViewModel = new ProductViewModel
             {
-                Name = "Test Product 2",
-                Price = 30.0,
-                Quantity = 25
+                Name = "Integration Test Product",
+                Price = 50.0,
+                Stock = 10,
+                Description = "Integration Test Description",
+                Details = "Integration Test Details"
             };
 
             // Act
-            _context.Product.Add(newProduct);
-            _context.SaveChanges();
+            _productService.SaveProduct(productViewModel);
 
             // Assert
-            var productFromDb = _context.Product.FirstOrDefault(p => p.Name == "Test Product 2");
-
+            var productFromDb = _context.Product.FirstOrDefault(p => p.Name == "Integration Test Product");
             Assert.NotNull(productFromDb); // Ensure the product exists in the database
-            Assert.Equal(30.0, productFromDb.Price); // Validate the price
-            Assert.Equal(25, productFromDb.Quantity); // Validate the stock
+            Assert.Equal(50.0, productFromDb.Price); // Validate the price
+            Assert.Equal(10, productFromDb.Quantity); // Validate the stock
         }
 
-        // Test for deletion of a product
         [Fact]
         public void DeleteProduct_ShouldRemoveFromDatabase()
         {
             // Arrange
-            var newProduct = new Product
+            var productViewModel = new ProductViewModel
             {
-                Name = "Test Product 3",
+                Name = "Test Product to Delete",
                 Price = 40.0,
-                Quantity = 35
+                Stock = 20,
+                Description = "Delete Test Description",
+                Details = "Delete Test Details"
             };
 
-            _context.Product.Add(newProduct);
-            _context.SaveChanges();
+            _productService.SaveProduct(productViewModel);
+            var productFromDb = _context.Product.FirstOrDefault(p => p.Name == "Test Product to Delete");
+            Assert.NotNull(productFromDb); // Ensure the product was added
 
             // Act
-            _context.Product.Remove(newProduct);
-            _context.SaveChanges();
+            _productService.DeleteProduct(productFromDb.Id);
 
             // Assert
-            var productFromDb = _context.Product.FirstOrDefault(p => p.Name == "Test Product 3");
-
-            Assert.Null(productFromDb); // Ensure the product does not exist in the database
+            var deletedProduct = _context.Product.FirstOrDefault(p => p.Name == "Test Product to Delete");
+            Assert.Null(deletedProduct); // Ensure the product no longer exists
         }
 
         // Clean up the context after tests run
