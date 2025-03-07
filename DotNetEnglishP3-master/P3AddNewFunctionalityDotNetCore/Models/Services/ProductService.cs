@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,21 +28,21 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
         }
         public List<ProductViewModel> GetAllProductsViewModel()
         {
-             
+
             IEnumerable<Product> productEntities = GetAllProducts();
             return MapToViewModel(productEntities);
         }
 
         private static List<ProductViewModel> MapToViewModel(IEnumerable<Product> productEntities)
         {
-            List <ProductViewModel> products = new List<ProductViewModel>();
+            List<ProductViewModel> products = new();
             foreach (Product product in productEntities)
             {
                 products.Add(new ProductViewModel
                 {
                     Id = product.Id,
-                    Stock = product.Quantity.ToString(),
-                    Price = product.Price.ToString(CultureInfo.InvariantCulture),
+                    Stock = product.Quantity,
+                    Price = product.Price,
                     Name = product.Name,
                     Description = product.Description,
                     Details = product.Details
@@ -83,54 +84,33 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
         }
         public void UpdateProductQuantities()
         {
-            Cart cart = (Cart) _cart;
+            Cart cart = (Cart)_cart;
             foreach (CartLine line in cart.Lines)
             {
                 _productRepository.UpdateProductStocks(line.Product.Id, line.Quantity);
             }
         }
 
-        // TODO this is an example method, remove it and perform model validation using data annotations
         public List<string> CheckProductModelErrors(ProductViewModel product)
         {
-            List<string> modelErrors = new List<string>();
-            if (product.Name == null || string.IsNullOrWhiteSpace(product.Name))
-            {
-                modelErrors.Add(_localizer["MissingName"]);
-            }
+            var modelErrors = new List<string>();
 
-            if (product.Price == null || string.IsNullOrWhiteSpace(product.Price))
-            {
-                modelErrors.Add(_localizer["MissingPrice"]);
-            }
+            // Perform model validation using Data Annotations
+            var validationContext = new ValidationContext(product);
+            var validationResults = new List<ValidationResult>();
 
-            if (!Double.TryParse(product.Price, out double pc))
-            {
-                modelErrors.Add(_localizer["PriceNotANumber"]);
-            }
-            else
-            {
-                if (pc <= 0)
-                    modelErrors.Add(_localizer["PriceNotGreaterThanZero"]);
-            }
+            Validator.TryValidateObject(product, validationContext, validationResults, validateAllProperties: true);
 
-            if (product.Stock == null || string.IsNullOrWhiteSpace(product.Stock))
+            foreach (var validationResult in validationResults)
             {
-                modelErrors.Add(_localizer["MissingQuantity"]);
+                //// Use _localizer to fetch the localized message
+                string localizedMessage = validationResult.ErrorMessage;
+                modelErrors.Add(localizedMessage);
             }
-
-            if (!int.TryParse(product.Stock, out int qt))
-            {
-                modelErrors.Add(_localizer["StockNotAnInteger"]);
-            }
-            else
-            {
-                if (qt <= 0)
-                    modelErrors.Add(_localizer["StockNotGreaterThanZero"]);
-            }
-
             return modelErrors;
         }
+
+
 
         public void SaveProduct(ProductViewModel product)
         {
@@ -140,16 +120,17 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
 
         private static Product MapToProductEntity(ProductViewModel product)
         {
-            Product productEntity = new Product
+            Product productEntity = new()
             {
                 Name = product.Name,
-                Price = double.Parse(product.Price),
-                Quantity = Int32.Parse(product.Stock),
+                Price = product.Price,
+                Quantity = Convert.ToInt32(product.Stock),
                 Description = product.Description,
                 Details = product.Details
             };
             return productEntity;
         }
+
 
         public void DeleteProduct(int id)
         {

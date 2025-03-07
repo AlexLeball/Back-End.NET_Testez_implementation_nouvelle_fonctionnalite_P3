@@ -12,12 +12,14 @@ namespace P3AddNewFunctionalityDotNetCore.Controllers
         private readonly ICart _cart;
         private readonly IOrderService _orderService;
         private readonly IStringLocalizer<OrderController> _localizer;
+        private readonly ILanguageService _languageService;
 
-        public OrderController(ICart cart, IOrderService service, IStringLocalizer<OrderController> localizer)
+        public OrderController(ICart cart, IOrderService service, ILanguageService languageService, IStringLocalizer<OrderController> localizer)
         {
             _cart = cart;
             _orderService = service;
             _localizer = localizer;
+            _languageService = languageService;
         }
 
         public ViewResult Index()

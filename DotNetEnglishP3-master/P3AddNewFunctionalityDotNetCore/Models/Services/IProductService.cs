@@ -19,3 +19,4 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
         Task<IList<Product>> GetProduct();
     }
 }
+

@@ -11,13 +11,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using P3AddNewFunctionalityDotNetCore;
 using System.Linq;
+using Microsoft.AspNetCore.Localization;
+using System.Collections.Generic;
+using System.Globalization;
+using Microsoft.Extensions.Options;
 
+// This file is the entry point of the application.
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Localization builder setup
 builder.Services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
+
+//Services and Repositories
 builder.Services.AddSingleton<ICart, Cart>();
 builder.Services.AddSingleton<ILanguageService, LanguageService>();
 builder.Services.AddTransient<IProductService, ProductService>();
@@ -26,29 +34,48 @@ builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
+// Configure MVC with localization
 builder.Services.AddMvc()
     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix, opts => { opts.ResourcesPath = "Resources"; })
     .AddDataAnnotationsLocalization();
 
+// Configure Request Localization options
+var supportedCultures = new List<CultureInfo>
+{
+    new CultureInfo("en"),      // Default language
+    new CultureInfo("en-GB"),
+    new CultureInfo("en-US"),
+    new CultureInfo("fr-FR"),
+    new CultureInfo("fr"),
+    new CultureInfo("es-ES"),
+    new CultureInfo("es")
+};
+
+builder.Services.Configure<RequestLocalizationOptions>(opts =>
+{
+    opts.DefaultRequestCulture = new RequestCulture("en"); // Default culture
+    opts.SupportedCultures = supportedCultures;
+    opts.SupportedUICultures = supportedCultures;
+});
+
+// Database configuration
 builder.Services.AddDbContext<P3Referential>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("P3Referential")));
-
 builder.Services.AddDbContext<AppIdentityDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("P3Identity")));
-
 builder.Services.AddDefaultIdentity<IdentityUser>()
         .AddEntityFrameworkStores<AppIdentityDbContext>()
         .AddDefaultTokenProviders();
-
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
 });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment()) 
 {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
@@ -59,22 +86,22 @@ else
     app.SeedDatabase(app.Configuration);
 }
 
+
+/// <summary> 
+/// Localization configuration
+/// </summary>
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-var supportedCultures = new[] { "en-GB", "en-US", "en", "fr-FR", "fr" };
-var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
-    .AddSupportedCultures(supportedCultures.ToArray())
-    .AddSupportedUICultures(supportedCultures);
-app.UseRequestLocalization(localizationOptions);
+app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
 app.UseSession();
-
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Add the endpoints to the request pipeline.
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Product}/{action=Index}/{id?}");

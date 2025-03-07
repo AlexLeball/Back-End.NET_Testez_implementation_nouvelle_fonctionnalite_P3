@@ -117,32 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Administrator" xml:space="preserve">
-    <value>Administrator</value>
+  <data name="Checkout" xml:space="preserve">
+    <value>complete la compra</value>
   </data>
-  <data name="Create" xml:space="preserve">
-    <value>Create</value>
+  <data name="ContinueShopping" xml:space="preserve">
+    <value>Continuar con las compras</value>
   </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="Description" xml:space="preserve">
-    <value>Description</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Name</value>
+  <data name="Item" xml:space="preserve">
+    <value>Producto</value>
   </data>
   <data name="Price" xml:space="preserve">
-    <value>Price</value>
+    <value>Precio</value>
   </data>
-  <data name="ProductAdministrationModule" xml:space="preserve">
-    <value>Product administration module</value>
+  <data name="Quantity" xml:space="preserve">
+    <value>Cantidad</value>
   </data>
-  <data name="Stock" xml:space="preserve">
-    <value>Stock</value>
+  <data name="Remove" xml:space="preserve">
+    <value>Eliminar</value>
   </data>
-  <data name="Details" xml:space="preserve">
-    <value>Details</value>
-    <comment>Details</comment>
+  <data name="Subtotal" xml:space="preserve">
+    <value>SubTotal</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="YourCart" xml:space="preserve">
+    <value>Su carrito</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Media</value>
   </data>
 </root>
